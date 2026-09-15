@@ -1,21 +1,51 @@
+import { useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
 const menuItems = [
-  { label: "Sách yêu thích", icon: "♥", subtitle: "Danh sách đã lưu" },
-  { label: "Lịch sử giao dịch", icon: "🧾", subtitle: "Gói hội viên" },
   {
-    label: "Mục tiêu đọc sách",
-    icon: "🎯",
-    subtitle: "Đặt mục tiêu hàng tháng",
+    label: "Đăng truyện",
+    icon: "+",
+    subtitle: "Tạo nội dung mới",
+    route: "/(user)/account/publish",
   },
-  { label: "Cài đặt ứng dụng", icon: "⚙️", subtitle: "Chế độ đọc & thông báo" },
+  {
+    label: "Quản lý truyện",
+    icon: "▤",
+    subtitle: "Truyện và chương đã đăng",
+    route: "/(user)/account/my-books",
+  },
+  {
+    label: "Ví tài khoản",
+    icon: "$",
+    subtitle: "Nạp tiền và rút doanh thu",
+    route: "/(user)/account/wallet",
+  },
+  {
+    label: "Lịch sử giao dịch",
+    icon: "≡",
+    subtitle: "Theo dõi các giao dịch",
+    route: "/(user)/account/transactions",
+  },
+  {
+    label: "Sách yêu thích",
+    icon: "♥",
+    subtitle: "Danh sách đã lưu",
+  },
+  {
+    label: "Cài đặt ứng dụng",
+    icon: "⚙",
+    subtitle: "Chế độ đọc & thông báo",
+    route: "/settings",
+  },
   { label: "Trợ giúp & Hỗ trợ", icon: "❔", subtitle: "FAQ & liên hệ" },
 ];
 
 export default function ProfileScreen() {
+  const router = useRouter();
+
   return (
     <ThemedView style={styles.container}>
       <ScrollView
@@ -59,7 +89,11 @@ export default function ProfileScreen() {
 
         <View style={styles.menuSection}>
           {menuItems.map((item) => (
-            <Pressable key={item.label} style={styles.menuItem}>
+            <Pressable
+              key={item.label}
+              style={styles.menuItem}
+              onPress={() => item.route && router.push(item.route as never)}
+            >
               <View style={styles.menuLeft}>
                 <View style={styles.iconBox}>
                   <ThemedText style={styles.iconText}>{item.icon}</ThemedText>

@@ -1,8 +1,7 @@
 import * as Haptics from "expo-haptics";
-import type { BottomTabBarButtonProps } from "expo-router";
-import { Pressable } from "react-native";
+import { Pressable, type PressableProps } from "react-native";
 
-export function HapticTab(props: BottomTabBarButtonProps) {
+export function HapticTab(props: PressableProps) {
   return (
     <Pressable
       {...props}

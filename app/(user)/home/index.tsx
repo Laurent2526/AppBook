@@ -1,10 +1,10 @@
 import { useRouter } from "expo-router";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
@@ -65,7 +65,7 @@ export default function HomeScreen() {
           </View>
           <Pressable
             style={styles.notificationButton}
-            onPress={() => router.push("/user app/notifications")}
+            onPress={() => router.push("/(user)/messages")}
           >
             <ThemedText style={styles.notificationIcon}>🔔</ThemedText>
           </Pressable>
@@ -149,7 +149,7 @@ export default function HomeScreen() {
 
         <View style={styles.sectionHeaderRow}>
           <ThemedText type="subtitle">Sách nổi bật</ThemedText>
-          <Pressable onPress={() => router.push("/user app/library")}>
+          <Pressable onPress={() => router.push("/(user)/library")}>
             <ThemedText style={styles.viewAllText}>Xem tất cả</ThemedText>
           </Pressable>
         </View>

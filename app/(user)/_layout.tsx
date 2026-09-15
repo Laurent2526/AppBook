@@ -11,7 +11,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="hello"
+      initialRouteName="home/index"
       screenOptions={{
         tabBarActiveTintColor:
           Colors[colorScheme === "dark" ? "dark" : "light"].tint,
@@ -20,16 +20,16 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home/index"
         options={{
-          title: "Home",
+          title: "Trang chủ",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="hello"
+        name="discover/index"
         options={{
           title: "Đề xuất",
           tabBarIcon: ({ color, focused }) => (
@@ -45,18 +45,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="library"
+        name="library/index"
         options={{
-          title: "Library",
+          title: "Thư viện",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="books.vertical.fill" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="messages/index"
         options={{
-          title: "Tin Nhắn",
+          title: "Tin nhắn",
           tabBarIcon: ({ color, focused }) => (
             <View
               style={[styles.messageIcon, focused && styles.messageIconActive]}
@@ -67,13 +67,29 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="account/index"
         options={{
-          title: "Explore",
+          title: "Tài khoản",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="person.fill" color={color} />
           ),
         }}
+      />
+      <Tabs.Screen
+        name="account/publish"
+        options={{ href: null, tabBarStyle: { display: "none" } }}
+      />
+      <Tabs.Screen
+        name="account/my-books"
+        options={{ href: null, tabBarStyle: { display: "none" } }}
+      />
+      <Tabs.Screen
+        name="account/wallet"
+        options={{ href: null, tabBarStyle: { display: "none" } }}
+      />
+      <Tabs.Screen
+        name="account/transactions"
+        options={{ href: null, tabBarStyle: { display: "none" } }}
       />
     </Tabs>
   );
