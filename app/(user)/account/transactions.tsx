@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const transactions = [
   {
@@ -17,29 +18,32 @@ const transactions = [
 
 export default function TransactionsScreen() {
   return (
-    <ScrollView contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Lịch sử giao dịch</Text>
-      {transactions.map((transaction) => (
-        <View
-          key={`${transaction.label}-${transaction.date}`}
-          style={styles.row}
-        >
-          <View>
-            <Text style={styles.label}>{transaction.label}</Text>
-            <Text style={styles.date}>{transaction.date}</Text>
-          </View>
-          <Text
-            style={[styles.amount, transaction.positive && styles.positive]}
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Lịch sử giao dịch</Text>
+        {transactions.map((transaction) => (
+          <View
+            key={`${transaction.label}-${transaction.date}`}
+            style={styles.row}
           >
-            {transaction.amount}
-          </Text>
-        </View>
-      ))}
-    </ScrollView>
+            <View>
+              <Text style={styles.label}>{transaction.label}</Text>
+              <Text style={styles.date}>{transaction.date}</Text>
+            </View>
+            <Text
+              style={[styles.amount, transaction.positive && styles.positive]}
+            >
+              {transaction.amount}
+            </Text>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: "#F6F7FB" },
   content: { padding: 20, gap: 10, backgroundColor: "#F6F7FB", flexGrow: 1 },
   title: { color: "#111827", fontSize: 28, fontWeight: "700", marginBottom: 8 },
   row: {

@@ -5,27 +5,31 @@ import {
     Text,
     TextInput,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PublishScreen() {
   return (
-    <ScrollView contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Đăng truyện</Text>
-      <TextInput style={styles.input} placeholder="Tên truyện" />
-      <TextInput style={styles.input} placeholder="Tác giả" />
-      <TextInput style={styles.input} placeholder="Thể loại" />
-      <TextInput
-        style={[styles.input, styles.multiline]}
-        placeholder="Mô tả truyện"
-        multiline
-      />
-      <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Tạo truyện</Text>
-      </Pressable>
-    </ScrollView>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Đăng truyện</Text>
+        <TextInput style={styles.input} placeholder="Tên truyện" />
+        <TextInput style={styles.input} placeholder="Tác giả" />
+        <TextInput style={styles.input} placeholder="Thể loại" />
+        <TextInput
+          style={[styles.input, styles.multiline]}
+          placeholder="Mô tả truyện"
+          multiline
+        />
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Tạo truyện</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: "#F6F7FB" },
   content: { padding: 20, gap: 14, backgroundColor: "#F6F7FB", flexGrow: 1 },
   title: { color: "#111827", fontSize: 28, fontWeight: "700", marginBottom: 8 },
   input: {

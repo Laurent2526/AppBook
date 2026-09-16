@@ -1,8 +1,10 @@
 import { useRouter } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
+import { useAuth } from "@/components/auth-provider";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const menuItems = [
   {
@@ -10,115 +12,177 @@ const menuItems = [
     icon: "+",
     subtitle: "Tạo nội dung mới",
     route: "/(user)/account/publish",
+    requiresAuth: true,
   },
   {
     label: "Quản lý truyện",
     icon: "▤",
     subtitle: "Truyện và chương đã đăng",
     route: "/(user)/account/my-books",
+    requiresAuth: true,
   },
   {
     label: "Ví tài khoản",
     icon: "$",
     subtitle: "Nạp tiền và rút doanh thu",
     route: "/(user)/account/wallet",
+    requiresAuth: true,
   },
   {
     label: "Lịch sử giao dịch",
     icon: "≡",
     subtitle: "Theo dõi các giao dịch",
     route: "/(user)/account/transactions",
+    requiresAuth: true,
   },
   {
     label: "Sách yêu thích",
     icon: "♥",
     subtitle: "Danh sách đã lưu",
+    requiresAuth: true,
+  },
+  {
+    label: "Đăng nhập / Đăng ký",
+    icon: "🔐",
+    subtitle: "Xác thực tài khoản để mở khóa tính năng",
+    route: "/auth",
+    requiresAuth: false,
   },
   {
     label: "Cài đặt ứng dụng",
     icon: "⚙",
     subtitle: "Chế độ đọc & thông báo",
     route: "/settings",
+    requiresAuth: false,
   },
-  { label: "Trợ giúp & Hỗ trợ", icon: "❔", subtitle: "FAQ & liên hệ" },
+  {
+    label: "Trợ giúp & Hỗ trợ",
+    icon: "❔",
+    subtitle: "FAQ & liên hệ",
+    requiresAuth: false,
+  },
 ];
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { isAuthenticated, logout, user } = useAuth();
+
+  const handleMenuPress = (item: (typeof menuItems)[number]) => {
+    if (item.requiresAuth && !isAuthenticated) {
+      Alert.alert(
+        "Yêu cầu đăng nhập",
+        "Bạn cần có tài khoản để sử dụng tính năng này. Chương miễn phí vẫn có thể đọc bình thường.",
+        [
+          { text: "Hủy", style: "cancel" },
+          { text: "Đăng nhập", onPress: () => router.push("/auth") },
+        ],
+      );
+      return;
+    }
+
+    if (item.route) {
+      router.push(item.route as never);
+    }
+  };
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
-      >
-        <View style={styles.profileHeader}>
-          <View style={styles.avatarWrap}>
-            <View style={styles.avatar}>
-              <ThemedText style={styles.avatarText}>YT</ThemedText>
-            </View>
-            <Pressable style={styles.editButton}>
-              <ThemedText style={styles.editIcon}>✏️</ThemedText>
-            </Pressable>
-          </View>
-
-          <ThemedText type="title" style={styles.name}>
-            Hoàng Thị Yên
-          </ThemedText>
-          <ThemedText style={styles.email}>yenhoang@gmail.com</ThemedText>
-
-          <View style={styles.badge}>
-            <ThemedText style={styles.badgeText}>Mọt sách cấp 1</ThemedText>
-          </View>
-        </View>
-
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statValue}>12</ThemedText>
-            <ThemedText style={styles.statLabel}>cuốn đã đọc</ThemedText>
-          </View>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statValue}>45</ThemedText>
-            <ThemedText style={styles.statLabel}>phút/ngày</ThemedText>
-          </View>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statValue}>5 ngày</ThemedText>
-            <ThemedText style={styles.statLabel}>đọc liên tiếp 🔥</ThemedText>
-          </View>
-        </View>
-
-        <View style={styles.menuSection}>
-          {menuItems.map((item) => (
-            <Pressable
-              key={item.label}
-              style={styles.menuItem}
-              onPress={() => item.route && router.push(item.route as never)}
-            >
-              <View style={styles.menuLeft}>
-                <View style={styles.iconBox}>
-                  <ThemedText style={styles.iconText}>{item.icon}</ThemedText>
-                </View>
-                <View>
-                  <ThemedText style={styles.menuLabel}>{item.label}</ThemedText>
-                  <ThemedText style={styles.menuSubtitle}>
-                    {item.subtitle}
-                  </ThemedText>
-                </View>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <ThemedView style={styles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}
+        >
+          <View style={styles.profileHeader}>
+            <View style={styles.avatarWrap}>
+              <View style={styles.avatar}>
+                <ThemedText style={styles.avatarText}>
+                  {(user?.name ?? "YT").slice(0, 2).toUpperCase()}
+                </ThemedText>
               </View>
-              <ThemedText style={styles.arrow}>›</ThemedText>
-            </Pressable>
-          ))}
-        </View>
+              <Pressable style={styles.editButton}>
+                <ThemedText style={styles.editIcon}>✏️</ThemedText>
+              </Pressable>
+            </View>
 
-        <Pressable style={styles.logoutButton}>
-          <ThemedText style={styles.logoutText}>Đăng xuất</ThemedText>
-        </Pressable>
-      </ScrollView>
-    </ThemedView>
+            <ThemedText type="title" style={styles.name}>
+              {user?.name ?? "Khách truy cập"}
+            </ThemedText>
+            <ThemedText style={styles.email}>
+              {user?.email ?? "Chưa đăng nhập"}
+            </ThemedText>
+
+            <View style={styles.badge}>
+              <ThemedText style={styles.badgeText}>
+                {isAuthenticated ? "Tài khoản đã xác thực" : "Chưa đăng nhập"}
+              </ThemedText>
+            </View>
+          </View>
+
+          <View style={styles.statsContainer}>
+            <View style={styles.statCard}>
+              <ThemedText style={styles.statValue}>12</ThemedText>
+              <ThemedText style={styles.statLabel}>cuốn đã đọc</ThemedText>
+            </View>
+            <View style={styles.statCard}>
+              <ThemedText style={styles.statValue}>45</ThemedText>
+              <ThemedText style={styles.statLabel}>phút/ngày</ThemedText>
+            </View>
+            <View style={styles.statCard}>
+              <ThemedText style={styles.statValue}>5 ngày</ThemedText>
+              <ThemedText style={styles.statLabel}>đọc liên tiếp 🔥</ThemedText>
+            </View>
+          </View>
+
+          <View style={styles.menuSection}>
+            {menuItems.map((item) => (
+              <Pressable
+                key={item.label}
+                style={styles.menuItem}
+                onPress={() => handleMenuPress(item)}
+              >
+                <View style={styles.menuLeft}>
+                  <View style={styles.iconBox}>
+                    <ThemedText style={styles.iconText}>{item.icon}</ThemedText>
+                  </View>
+                  <View>
+                    <ThemedText style={styles.menuLabel}>
+                      {item.label}
+                    </ThemedText>
+                    <ThemedText style={styles.menuSubtitle}>
+                      {item.subtitle}
+                    </ThemedText>
+                  </View>
+                </View>
+                <ThemedText style={styles.arrow}>›</ThemedText>
+              </Pressable>
+            ))}
+          </View>
+
+          <Pressable
+            style={[
+              styles.logoutButton,
+              !isAuthenticated && styles.logoutButtonDisabled,
+            ]}
+            onPress={() => {
+              if (!isAuthenticated) {
+                router.push("/auth");
+                return;
+              }
+              logout();
+            }}
+          >
+            <ThemedText style={styles.logoutText}>
+              {isAuthenticated ? "Đăng xuất" : "Đăng nhập / Đăng ký"}
+            </ThemedText>
+          </Pressable>
+        </ScrollView>
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: "#F6F7FB" },
   container: {
     flex: 1,
     backgroundColor: "#F6F7FB",
@@ -281,6 +345,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
+  },
+  logoutButtonDisabled: {
+    backgroundColor: "#4F46E5",
+    shadowColor: "#4F46E5",
+    shadowOpacity: 0.2,
   },
   logoutText: {
     color: "#FFFFFF",

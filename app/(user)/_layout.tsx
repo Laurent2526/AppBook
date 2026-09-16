@@ -29,6 +29,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="home/explore"
+        options={{ href: null, tabBarStyle: { display: "none" } }}
+      />
+      <Tabs.Screen
         name="discover/index"
         options={{
           title: "Đề xuất",
